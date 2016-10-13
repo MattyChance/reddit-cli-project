@@ -35,25 +35,67 @@ This function should "return" the default homepage posts as an array of objects
 //   });
 // }
 
+/*
+the following is creating a function for requesting the json data
+
+function requestAsJson(url, callback) {
+  request(url, function(err, result) {
+    if (err) {
+      callback(err);
+    }
+    else {
+      try {
+        var output = JSON.parse(result.body.children);
+        callback(output);
+      }
+      catch (err) {
+        callback(err);
+      }
+    }
+  });
+}
+//require reddit homepage posts using requestAsJson
+
+function getHomepage(callback) {
+  requestAsJson('https://reddit.com/.json', function(err, homepageData) {
+    if (err) {
+      console.log('crap', err);
+    }
+    else {
+      return homepageData.data;
+    }
+  });
+}
+
+getHomepage(function(err, response) {
+  if (err) {
+    console.log('wrong!', err);
+  }
+  else {
+    console.log(response);
+  }
+})
+*/
+
 //used Promises to recreate the getHomepage function
 function getHomepage() {
   return (
     requestPromise('https://reddit.com/.json')
     .then(function(homepageResponse) {
-      return JSON.parse(homepageResponse.body).data;
+      return JSON.parse(homepageResponse.body).data.children;
     })
   );
 }
 
-/*checking it by calling it here
-getHomepage()
-  .then(function(homepageData) {
-    console.log(homepageData);
-  })
-  .catch(function (err) {
-    console.log('Something went wrong: ', err);
-  });
-*/
+//checking it by calling it here
+// getHomepage()
+//   .then(function(homepageData) {
+//     console.log(homepageData);
+//   })
+//   .catch(function (err) {
+//     console.log('Something went wrong: ', err);
+//   });
+
 
 
 /*
@@ -106,13 +148,13 @@ function getSubreddit(subreddit) {
   // Load reddit.com/r/{subreddit}.json and call back with the array of posts
   return (requestPromise('https://www.reddit.com/' + 'r/' + subreddit + '.json')
     .then(function(showSubreddit) {
-      return JSON.parse(showSubreddit.body).data;
+      return JSON.parse(showSubreddit.body).data.children;
     })
   );
 }
 
 /*below is to test getSubreddit
-getSubreddit('cat')
+getSubreddit('art')
   .then(function(subredditPageData) {
     console.log(subredditPageData);
   })
