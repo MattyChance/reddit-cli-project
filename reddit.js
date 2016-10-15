@@ -100,7 +100,7 @@ function getHomepage() {
 
 /*
 This function should "return" the default homepage posts as an array of objects.
-In contrast to the `getHomepage` function, this one accepts a `sortingMethod` parameter.
+In contrast to the `getHomepa ge` function, this one accepts a `sortingMethod` parameter.
 */
 function getSortedHomepage(sortingMethod) {
   // Load reddit.com/{sortingMethod}.json and call back with the array of posts
@@ -146,22 +146,29 @@ This function should "return" the posts on the front page of a subreddit as an a
 */
 function getSubreddit(subreddit) {
   // Load reddit.com/r/{subreddit}.json and call back with the array of posts
-  return (requestPromise('https://www.reddit.com/' + 'r/' + subreddit + '.json')
+  return (requestPromise('https://www.reddit.com/' + /*'r/'*/  subreddit + '.json')
     .then(function(showSubreddit) {
       return JSON.parse(showSubreddit.body).data.children;
     })
   );
 }
 
-/*below is to test getSubreddit
-getSubreddit('art')
-  .then(function(subredditPageData) {
-    console.log(subredditPageData);
-  })
-  .catch(function(err) {
-    console.log(err);
-  })
-*/
+function getSubredditPost(subreddit) {
+   return (requestPromise('https://www.reddit.com/' + /*'r/'*/  subreddit + '.json')
+    .then(function(showSubreddit) {
+      return JSON.parse(showSubreddit.body)[0].data.children;
+    })
+  );
+}
+//below is to test getSubreddit
+// getSubredditPost('/r/funny/comments/57i1v2/a_natural_response/')
+//   .then(function(subredditPageData) {
+//     console.log(subredditPageData);
+//   })
+//   .catch(function(err) {
+//     console.log(err);
+//   })
+
 
 /*
 This function should "return" the posts on the front page of a subreddit as an array of objects.
@@ -213,5 +220,6 @@ module.exports = {
   'getHomepage': getHomepage,
   'getSubreddit': getSubreddit,
   'getSortedSubreddit': getSortedSubreddit,
-  'getSubreddits': getSubreddits
+  'getSubreddits': getSubreddits,
+  'getSubredditPost': getSubredditPost
 };
